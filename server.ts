@@ -8,6 +8,8 @@ import userRoutes from "./src/routes/userRoutes";
 import passport from 'passport';
 require ("./src/auth/passportConfig");
 import session from 'express-session';
+import dotenv from 'dotenv';
+dotenv.config();
 app.use(session({
     secret:"secret",
     resave:false,
@@ -27,6 +29,6 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({ message: err.message });
 });
 
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+app.listen(process.env.PORT, () => {
+    console.log(`Server is running on port ${process.env.PORT}`);
 });
