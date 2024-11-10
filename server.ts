@@ -21,11 +21,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const corsOptions = {
-    origin: 'https://divine-illumination-production-e575.up.railway.app', // Allow only this origin to access the API
-    credentials: true,               // Allow credentials (cookies, authorization headers, etc.)
-  };
+    origin: 'https://divine-illumination-production-e575.up.railway.app', // Allow only this origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Explicitly allow these methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
+    credentials: true, // Allow cookies and credentials
+};
 app.use(cors(corsOptions));
-
+app.options('*', cors(corsOptions));
 app.use("/api/auth",authRoutes);
 app.use('/api/jobs',jobRoutes);
 app.use('/api/users',userRoutes)
