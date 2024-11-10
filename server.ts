@@ -19,7 +19,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+
+const corsOptions = {
+    origin: 'https://divine-illumination-production-e575.up.railway.app', // Allow only this origin to access the API
+    credentials: true,               // Allow credentials (cookies, authorization headers, etc.)
+  };
+app.use(cors(corsOptions));
 
 app.use("/api/auth",authRoutes);
 app.use('/api/jobs',jobRoutes);
