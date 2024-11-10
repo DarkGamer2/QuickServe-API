@@ -5,4 +5,5 @@ export interface UserInt{
     created_at:Date,
     updated_at:Date,
     skillSet:string[]
+    role:string
 }

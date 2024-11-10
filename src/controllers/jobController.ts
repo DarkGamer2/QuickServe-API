@@ -21,9 +21,24 @@ class JobController {
     }
 
     public async createJob(req: Request, res: Response) {
-        const job = new Job(req.body);
         try {
-            const newJob = await job.save();
+            const newJob = new Job({
+                jobRequester: req.body.jobRequester,
+                jobDescription: req.body.jobDescription,
+                jobRequestDate: req.body.jobRequestDate,
+                assignedBy: req.body.assignedBy,
+                jobLocation: req.body.jobLocation,
+                jobType: req.body.jobType,
+                jobStatus: req.body.jobStatus,
+                jobIcon: req.body.jobIcon,
+                productInformation: {
+                    productManufacturer: req.body.productInformation.productManufacturer,
+                    productModelNumber: req.body.productInformation.productModelNumber,
+                    productSerialNumber: req.body.productInformation.productSerialNumber,
+                },
+                successMessage: req.body.successMessage,
+            });
+            await newJob.save();
             res.status(201).json(newJob);
         } catch (error: any) {
             res.status(400).json({ message: error.message });

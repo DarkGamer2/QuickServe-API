@@ -6,6 +6,7 @@ dotenv.config();
 
 mongoose.connect(`${process.env.MONGO_URI}`)
 const JobSchema=new Schema({
+    jobName:String,
     jobRequester:String,
     roomNumber:Number,
     phoneNumber:String,
@@ -21,6 +22,9 @@ const JobSchema=new Schema({
     ],
     jobDescription:String,
     jobRequestDate:Date,
+    assignedBy:String,
+    jobType:String,
+    jobStatus:String,
 })
 
 const Job=mongoose.model("Job",JobSchema);

@@ -1,26 +1,25 @@
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import User from '../models/User';
-import bcrypt from 'bcrypt';
-import { Strategy as LocalStrategy } from 'passport-local';
+import dotenv from "dotenv";
+dotenv.config();
+const opts = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET!,
+};
 
-module.exports = function(passport: any) {
-    passport.use(new LocalStrategy(
-        { usernameField: 'email' }, // Specify that the username field is 'email'
-        async (email: string, password: string, done: (error: any, user?: any, options?: any) => void) => {
-            try {
-                const user = await User.findOne({ email: email });
-                if (!user) {
-                    return done(null, false, { message: 'User not found' });
-                }
+const strategy = new JwtStrategy(opts, async (jwt_payload, done) => {
+  try {
+    const user = await User.findById(jwt_payload.id);
+    if (user) {
+      return done(null, user);
+    } else {
+      return done(null, false);
+    }
+  } catch (error) {
+    return done(error, false);
+  }
+});
 
-                const isMatch = user.password ? await bcrypt.compare(password, user.password) : false;
-                if (isMatch) {
-                    return done(null, user);
-                } else {
-                    return done(null, false, { message: 'Incorrect password' });
-                }
-            } catch (err: any) {
-                return done(err);
-            }
-        }
-    ));
-}
+export default (passport: any) => {
+  passport.use(strategy);
+};
