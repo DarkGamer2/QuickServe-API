@@ -9,6 +9,7 @@ import passport from 'passport';
 require ("./src/auth/passportConfig");
 import session from 'express-session';
 import dotenv from 'dotenv';
+import cookieParser from "cookie-parser";
 dotenv.config();
 app.use(session({
     secret:"secret",
@@ -26,6 +27,7 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
     credentials: true, // Allow cookies and credentials
 };
+app.use(cookieParser());
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use("/api/auth",authRoutes);
