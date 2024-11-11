@@ -10,14 +10,13 @@ import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
 
 dotenv.config();
-require ("./src/auth/passportConfig");
 
 const app = express();
 
 app.use(session({
-    secret: "secret",
-    resave: false,
-    saveUninitialized: false
+  secret: process.env.SESSION_SECRET!,
+  resave: false,
+  saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -41,13 +40,7 @@ app.use("/api/auth", authRoutes);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/users', userRoutes);
 
-// Error handler
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    console.error(err.stack);
-    res.status(500).json({ message: err.message });
-});
-
-// Start server
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
