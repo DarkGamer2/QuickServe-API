@@ -28,7 +28,7 @@ app.use(cookieParser());
 const corsOptions = {
     origin: 'https://divine-illumination-production-e575.up.railway.app', // Allowed origin
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Explicit methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+    allowedHeaders: ['Content-Type', 'Authorization','Access-Control-Allow-Origin'], // Allowed headers
     credentials: true, // Allow credentials
 };
 
