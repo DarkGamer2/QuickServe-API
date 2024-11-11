@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import { Request, Response, NextFunction } from 'express';
 import authRoutes from './src/routes/authenticationRoutes';
 import jobRoutes from './src/routes/jobRoutes';
 import userRoutes from "./src/routes/userRoutes";
@@ -13,11 +12,6 @@ dotenv.config();
 
 const app = express();
 
-app.use(session({
-  secret: process.env.SESSION_SECRET!,
-  resave: false,
-  saveUninitialized: false
-}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
@@ -35,6 +29,11 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // Pre-flight requests
 
+app.use(session({
+  secret: process.env.SESSION_SECRET!,
+  resave: false,
+  saveUninitialized: false
+}));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use('/api/jobs', jobRoutes);
