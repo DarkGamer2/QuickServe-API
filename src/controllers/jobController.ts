@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Job from "../models/Job"; // Adjust the path as necessary
 
 class JobController {
-    public async getJobs(req: Request, res: Response) {
+    public async getJobs(_req: Request, res: Response) {
         try {
             const jobs = await Job.find();
             res.json(jobs);
@@ -37,11 +37,35 @@ class JobController {
                     productSerialNumber: req.body.productInformation.productSerialNumber,
                 },
                 successMessage: req.body.successMessage,
+                userId: req.body.userId, // Add userId to the job
             });
             await newJob.save();
             res.status(201).json(newJob);
         } catch (error: any) {
             res.status(400).json({ message: error.message });
+        }
+    }
+
+    public async updateJobStatus(req: Request, res: Response) {
+        try {
+            const job = await Job.findById(req.params.id);
+            if (!job) {
+                return res.status(404).json({ message: "Job not found" });
+            }
+            job.jobStatus = req.body.jobStatus;
+            await job.save();
+            res.json(job);
+        } catch (error: any) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+
+    public async getJobsByUser(req: Request, res: Response) {
+        try {
+            const jobs = await Job.find({ userId: req.params.userId });
+            res.json(jobs);
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
         }
     }
 }
